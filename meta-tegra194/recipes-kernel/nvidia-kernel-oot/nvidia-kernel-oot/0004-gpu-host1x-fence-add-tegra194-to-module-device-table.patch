@@ -1,0 +1,24 @@
+From 1b34039fbb3307ec0406f0d15f3f082247a56a4a Mon Sep 17 00:00:00 2001
+From: Kurt Kiefer <kekiefer@gmail.com>
+Date: Tue, 20 Jan 2026 11:44:26 -0800
+Subject: [PATCH] gpu: host1x-fence: add tegra194 to module device table
+
+---
+ nvidia-oot/drivers/gpu/host1x-fence/dev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/nvidia-oot/drivers/gpu/host1x-fence/dev.c b/nvidia-oot/drivers/gpu/host1x-fence/dev.c
+index fa95e28..28b41a6 100644
+--- a/nvidia-oot/drivers/gpu/host1x-fence/dev.c
++++ b/nvidia-oot/drivers/gpu/host1x-fence/dev.c
+@@ -500,6 +500,7 @@ unregister_chrdev_region:
+ }
+ 
+ static const struct of_device_id host1x_fence_of_match[] = {
++	{ .compatible = "nvidia,tegra194-host1x" },
+ 	{ .compatible = "nvidia,tegra234-host1x" },
+ 	{ },
+ };
+-- 
+2.34.1
+

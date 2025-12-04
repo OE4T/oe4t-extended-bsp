@@ -1,0 +1,24 @@
+From 5b5cbe897c250b98f26472c8488293aa36a04012 Mon Sep 17 00:00:00 2001
+From: Kurt Kiefer <kekiefer@gmail.com>
+Date: Fri, 16 Jan 2026 11:14:20 -0800
+Subject: [PATCH] drm: tegra: dp: initialize displayport preferring widest link
+ first
+
+Upstream-Status: Pending
+---
+ nvidia-oot/drivers/gpu/drm/tegra/dp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/nvidia-oot/drivers/gpu/drm/tegra/dp.c b/nvidia-oot/drivers/gpu/drm/tegra/dp.c
+index bc6d9a2..2a5f204 100644
+--- a/nvidia-oot/drivers/gpu/drm/tegra/dp.c
++++ b/nvidia-oot/drivers/gpu/drm/tegra/dp.c
+@@ -399,7 +399,7 @@ int drm_dp_link_choose(struct drm_dp_link *link,
+ 	/* available link symbol clock rates */
+ 	static const unsigned int rates[3] = { 162000, 270000, 540000 };
+ 	/* available number of lanes */
+-	static const unsigned int lanes[3] = { 1, 2, 4 };
++	static const unsigned int lanes[3] = { 4, 2, 1 };
+ 	unsigned long requirement, capacity;
+ 	unsigned int rate = link->max_rate;
+ 	unsigned int i, j;
