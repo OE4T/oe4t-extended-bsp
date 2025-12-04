@@ -1,0 +1,11 @@
+[Unit]
+Description=NVIDIA power management setup
+Before=graphical.target display-manager.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/nvpower.sh
+
+[Install]
+WantedBy=multi-user.target
