@@ -14,10 +14,10 @@ Upstream-Status: Pending
  nvidia-oot/drivers/gpu/drm/tegra/hub.c | 3 ---
  1 file changed, 3 deletions(-)
 
-diff --git a/nvidia-oot/drivers/gpu/drm/tegra/hub.c b/nvidia-oot/drivers/gpu/drm/tegra/hub.c
+diff --git a/drivers/gpu/drm/tegra/hub.c b/drivers/gpu/drm/tegra/hub.c
 index 9ba941a..a31e28c 100644
---- a/nvidia-oot/drivers/gpu/drm/tegra/hub.c
-+++ b/nvidia-oot/drivers/gpu/drm/tegra/hub.c
+--- a/drivers/gpu/drm/tegra/hub.c
++++ b/drivers/gpu/drm/tegra/hub.c
 @@ -702,9 +702,6 @@ static void tegra_shared_plane_atomic_update(struct drm_plane *plane,
  
  		/* XXX parameterize */

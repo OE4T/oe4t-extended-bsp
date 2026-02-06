@@ -9,10 +9,10 @@ Upstream-Status: Pending
  .../platform/tegra/tegra-cactmon-mc-all.c     | 10 ++++
  2 files changed, 57 insertions(+)
 
-diff --git a/nvidia-oot/drivers/platform/tegra/mc-utils/mc-utils.c b/nvidia-oot/drivers/platform/tegra/mc-utils/mc-utils.c
+diff --git a/drivers/platform/tegra/mc-utils/mc-utils.c b/drivers/platform/tegra/mc-utils/mc-utils.c
 index 2a7d29f..784369f 100644
---- a/nvidia-oot/drivers/platform/tegra/mc-utils/mc-utils.c
-+++ b/nvidia-oot/drivers/platform/tegra/mc-utils/mc-utils.c
+--- a/drivers/platform/tegra/mc-utils/mc-utils.c
++++ b/drivers/platform/tegra/mc-utils/mc-utils.c
 @@ -391,12 +391,59 @@ static int __init tegra_mc_utils_init_t23x(void)
  	return 0;
  }
@@ -73,10 +73,10 @@ index 2a7d29f..784369f 100644
  	pr_err("mc-utils: Not able to find SOC DT node\n");
  	return -ENODEV;
  }
-diff --git a/nvidia-oot/drivers/platform/tegra/tegra-cactmon-mc-all.c b/nvidia-oot/drivers/platform/tegra/tegra-cactmon-mc-all.c
+diff --git a/drivers/platform/tegra/tegra-cactmon-mc-all.c b/drivers/platform/tegra/tegra-cactmon-mc-all.c
 index 49d50c1..2e361a3 100644
---- a/nvidia-oot/drivers/platform/tegra/tegra-cactmon-mc-all.c
-+++ b/nvidia-oot/drivers/platform/tegra/tegra-cactmon-mc-all.c
+--- a/drivers/platform/tegra/tegra-cactmon-mc-all.c
++++ b/drivers/platform/tegra/tegra-cactmon-mc-all.c
 @@ -12,6 +12,7 @@
  #include <linux/of.h>
  #include <linux/platform_device.h>

@@ -9,10 +9,10 @@ Upstream-Status: Pending
  nvidia-oot/drivers/gpu/drm/tegra/dp.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/nvidia-oot/drivers/gpu/drm/tegra/dp.c b/nvidia-oot/drivers/gpu/drm/tegra/dp.c
+diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
 index bc6d9a2..2a5f204 100644
---- a/nvidia-oot/drivers/gpu/drm/tegra/dp.c
-+++ b/nvidia-oot/drivers/gpu/drm/tegra/dp.c
+--- a/drivers/gpu/drm/tegra/dp.c
++++ b/drivers/gpu/drm/tegra/dp.c
 @@ -399,7 +399,7 @@ int drm_dp_link_choose(struct drm_dp_link *link,
  	/* available link symbol clock rates */
  	static const unsigned int rates[3] = { 162000, 270000, 540000 };
