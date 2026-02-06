@@ -1,7 +1,6 @@
 require tegra-binaries-${PV}.inc
 require tegra-shared-binaries-r35.inc
 
-COMPATIBLE_MACHINE = "(tegra)"
 INHIBIT_DEFAULT_DEPS = "1"
 
 PARTITION_FILE ?= "${S}/bootloader/${NVIDIA_BOARD}/cfg/${PARTITION_LAYOUT_TEMPLATE}"

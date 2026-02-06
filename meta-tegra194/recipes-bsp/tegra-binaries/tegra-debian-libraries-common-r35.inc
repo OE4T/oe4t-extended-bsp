@@ -5,7 +5,7 @@ L4T_DEB_COPYRIGHT_MD5 ??= ""
 L4T_DEB_TRANSLATED_BPN ?= "${@d.getVar('BPN').replace('tegra-libraries-', 'nvidia-l4t-')}"
 LIC_FILES_CHKSUM = "file://usr/share/doc/${L4T_DEB_TRANSLATED_BPN}/copyright;md5=${L4T_DEB_COPYRIGHT_MD5}"
 
-COMPATIBLE_MACHINE = "(tegra)"
+COMPATIBLE_MACHINE = "(tegra194)"
 
 inherit l4t_deb_pkgfeed_r35
 

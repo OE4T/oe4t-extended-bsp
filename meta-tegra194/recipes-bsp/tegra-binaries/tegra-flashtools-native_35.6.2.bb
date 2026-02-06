@@ -14,7 +14,7 @@ SRC_URI += "\
            file://0013-Fix-location-of-bsp_version-file-in-l4t_bup_gen.func.patch \
            file://0014-odmsign.func-fix-ODMDATA-and-overlay-DTB-handling-fo.patch \
            "
-S = "${WORKDIR}/Linux_for_Tegra"
+S = "${UNPACKDIR}/Linux_for_Tegra"
 B = "${WORKDIR}/build"
 
 COMPATIBLE_MACHINE = ""

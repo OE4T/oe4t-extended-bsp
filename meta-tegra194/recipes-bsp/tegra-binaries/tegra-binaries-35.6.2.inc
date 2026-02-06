@@ -15,13 +15,13 @@ do_convert_crlf_to_lf () {
 	find ${S} -type f "-(" -name "*.cfg" -o -name "*.dts*" "-)" -exec dos2unix {} \;
 }
 
-S = "${TMPDIR}/work-shared/L4T-${L4T_BSP_ARCH}-${L4T_VERSION}-${PR}/Linux_for_Tegra"
+S = "${L4T_BSP_SHARED_SOURCE_DIR}"
 B = "${WORKDIR}/build"
 
 INHIBIT_PACKAGE_STRIP = "1"
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 
-COMPATIBLE_MACHINE = "tegra"
+COMPATIBLE_MACHINE = "(tegra194)"
 
 do_preconfigure() {
     :

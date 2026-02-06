@@ -69,9 +69,16 @@ TEGRA_OPTEE_VERSION = "3.21.0-l4t%"
 PREFERRED_VERSION_optee-os = "${TEGRA_OPTEE_VERSION}"
 PREFERRED_VERSION_optee-os-tadevkit = "${TEGRA_OPTEE_VERSION}"
 PREFERRED_VERSION_optee-client = "${TEGRA_OPTEE_VERSION}"
+PREFERRED_VERSION_optee-test = "${TEGRA_OPTEE_VERSION}"
 PREFERRED_VERSION_optee-samples = "35.6%"
 
 PREFERRED_PROVIDER_virtual/dtb:tegra194 ?= "tegra194-devicetrees"
 PREFERRED_PROVIDER_virtual/kernel:tegra194 ?= "linux-yocto"
+PREFERRED_RPROVIDER_tegra-gbm-backend = "tegra-udrm-gbm"
 
 TEGRA_FLASHVARS:append:tegra194 = " EMMC_CFG MISC_COLD_BOOT_CONFIG SCR_COLD_BOOT_CONFIG"
+
+UBOOT_EXTLINUX_FDT = "/boot/${DTBFILE}"
+
+TOSIMGFILENAME:tegra194 = "tos-optee_t194.img"
+TEGRAFLASH_PKG_DEPENDS:append:tegra194 = " tegra-redundant-boot-rollback:do_populate_sysroot"

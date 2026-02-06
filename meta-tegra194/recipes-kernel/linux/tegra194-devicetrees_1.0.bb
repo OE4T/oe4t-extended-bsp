@@ -7,21 +7,23 @@ inherit devicetree
 COMPATIBLE_MACHINE = "(tegra194)"
 
 SRC_URI = "\
-    git://github.com/oe4t/tegra194-devicetrees.git;protocol=https;branch=master;name=oe4t;destsuffix=git/oe4t \
+    git://github.com/oe4t/tegra194-devicetrees.git;protocol=https;branch=master \
 "
 
-SRCREV = "8d8db474a53a080864dda0b0adb2f78966966b31"
+S = "${UNPACKDIR}/${BP}"
+B = "${S}"
 
-S = "${WORKDIR}/git"
-DT_FILES_PATH:xavier-nx = "${S}/oe4t/platform/t19x/jakku/kernel-dts"
-DT_FILES_PATH:xavier-agx = "${S}/oe4t/platform/t19x/galen/kernel-dts"
+SRCREV = "024b2ab7f199d311823268c6ff084e40de07338d"
+
+DT_FILES_PATH:xavier-nx = "platform/t19x/jakku/kernel-dts"
+DT_FILES_PATH:xavier-agx = "platform/t19x/galen/kernel-dts"
 
 DT_INCLUDE:append = " \
-    ${S}/oe4t/soc/tegra/kernel-include \
-    ${S}/oe4t/platform/t19x/common/kernel-dts \
-    ${S}/oe4t/platform/tegra/common/kernel-dts \
-    ${S}/oe4t/soc/t19x/kernel-include \
-    ${S}/oe4t/soc/t19x/kernel-dts \
+    ${S}/soc/tegra/kernel-include \
+    ${S}/platform/t19x/common/kernel-dts \
+    ${S}/platform/tegra/common/kernel-dts \
+    ${S}/soc/t19x/kernel-include \
+    ${S}/soc/t19x/kernel-dts \
 "
 
 # re-implement function from devicetree.bbclass to preserve order of KERNEL_INCLUDE

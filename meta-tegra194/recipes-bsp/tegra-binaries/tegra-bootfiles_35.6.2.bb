@@ -1,7 +1,6 @@
 require tegra-binaries-${PV}.inc
 require tegra-shared-binaries-r35.inc
 
-COMPATIBLE_MACHINE = "(tegra194)"
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = "tegra-flashvars tegra-storage-layout tegra-eks-image dtc-native coreutils-native lz4-native"
 

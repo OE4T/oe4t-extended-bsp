@@ -14,7 +14,7 @@ SRC_TARBALL ??= "INVALID"
 
 PROVIDES += "cboot"
 
-S = "${WORKDIR}/${BP}"
+S = "${UNPACKDIR}/${BP}"
 B = "${WORKDIR}/build"
 
 TARGET_SOC ??= "INVALID"

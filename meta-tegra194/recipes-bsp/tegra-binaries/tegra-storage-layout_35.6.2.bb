@@ -2,7 +2,7 @@ DESCRIPTION = "Storage layout XML definitions"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-COMPATIBLE_MACHINE = "(tegra)"
+COMPATIBLE_MACHINE = "(tegra194)"
 INHIBIT_DEFAULT_DEPS = "1"
 
 DEPENDS = "tegra-helper-scripts-native tegra-storage-layout-base"
