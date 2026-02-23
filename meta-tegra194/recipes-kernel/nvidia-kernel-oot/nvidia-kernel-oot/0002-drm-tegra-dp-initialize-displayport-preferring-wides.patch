@@ -1,4 +1,4 @@
-From 5b5cbe897c250b98f26472c8488293aa36a04012 Mon Sep 17 00:00:00 2001
+From cdcc3d87905befd340178846adc36a147e602c35 Mon Sep 17 00:00:00 2001
 From: Kurt Kiefer <kekiefer@gmail.com>
 Date: Fri, 16 Jan 2026 11:14:20 -0800
 Subject: [PATCH] drm: tegra: dp: initialize displayport preferring widest link
@@ -6,11 +6,11 @@ Subject: [PATCH] drm: tegra: dp: initialize displayport preferring widest link
 
 Upstream-Status: Pending
 ---
- nvidia-oot/drivers/gpu/drm/tegra/dp.c | 2 +-
+ drivers/gpu/drm/tegra/dp.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
-index bc6d9a2..2a5f204 100644
+index bc6d9a2c..2a5f2046 100644
 --- a/drivers/gpu/drm/tegra/dp.c
 +++ b/drivers/gpu/drm/tegra/dp.c
 @@ -399,7 +399,7 @@ int drm_dp_link_choose(struct drm_dp_link *link,

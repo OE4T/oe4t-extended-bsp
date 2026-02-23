@@ -1,4 +1,4 @@
-From 0281d1f23c31006dda8fa16309c09cf6ebe8c96e Mon Sep 17 00:00:00 2001
+From cb6b50978abc9e80c0972d33870beebd9be871ef Mon Sep 17 00:00:00 2001
 From: Kurt Kiefer <kekiefer@gmail.com>
 Date: Mon, 19 Jan 2026 11:26:00 -0800
 Subject: [PATCH] drm/tegra: hub: disable SRGB degamma in absence of CMU
@@ -11,14 +11,14 @@ and sRGB output, so just leave this alone in the window.
 
 Upstream-Status: Pending
 ---
- nvidia-oot/drivers/gpu/drm/tegra/hub.c | 3 ---
+ drivers/gpu/drm/tegra/hub.c | 3 ---
  1 file changed, 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/tegra/hub.c b/drivers/gpu/drm/tegra/hub.c
-index 9ba941a..a31e28c 100644
+index e923d228..8d5f695a 100644
 --- a/drivers/gpu/drm/tegra/hub.c
 +++ b/drivers/gpu/drm/tegra/hub.c
-@@ -702,9 +702,6 @@ static void tegra_shared_plane_atomic_update(struct drm_plane *plane,
+@@ -704,9 +704,6 @@ static void tegra_shared_plane_atomic_update(struct drm_plane *plane,
  
  		/* XXX parameterize */
  		value |= COLOR_SPACE_YUV_2020;

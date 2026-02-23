@@ -1,16 +1,16 @@
-From bf53db71d60ddd6a9a1eb4c9a97760bb98cbee48 Mon Sep 17 00:00:00 2001
+From 3df64e98933246617746cace316a10a87c2c6da6 Mon Sep 17 00:00:00 2001
 From: Kurt Kiefer <kekiefer@gmail.com>
 Date: Fri, 16 Jan 2026 11:17:45 -0800
 Subject: [PATCH] tegra194: actmon: fix set up of mc-utils and actmon
 
 Upstream-Status: Pending
 ---
- .../platform/tegra/mc-utils/mc-utils.c        | 47 +++++++++++++++++++
- .../platform/tegra/tegra-cactmon-mc-all.c     | 10 ++++
+ drivers/platform/tegra/mc-utils/mc-utils.c    | 47 +++++++++++++++++++
+ drivers/platform/tegra/tegra-cactmon-mc-all.c | 10 ++++
  2 files changed, 57 insertions(+)
 
 diff --git a/drivers/platform/tegra/mc-utils/mc-utils.c b/drivers/platform/tegra/mc-utils/mc-utils.c
-index 2a7d29f..784369f 100644
+index 2a7d29fd..784369f4 100644
 --- a/drivers/platform/tegra/mc-utils/mc-utils.c
 +++ b/drivers/platform/tegra/mc-utils/mc-utils.c
 @@ -391,12 +391,59 @@ static int __init tegra_mc_utils_init_t23x(void)
@@ -74,7 +74,7 @@ index 2a7d29f..784369f 100644
  	return -ENODEV;
  }
 diff --git a/drivers/platform/tegra/tegra-cactmon-mc-all.c b/drivers/platform/tegra/tegra-cactmon-mc-all.c
-index 49d50c1..2e361a3 100644
+index f428aa3b..8cdf11b8 100644
 --- a/drivers/platform/tegra/tegra-cactmon-mc-all.c
 +++ b/drivers/platform/tegra/tegra-cactmon-mc-all.c
 @@ -12,6 +12,7 @@

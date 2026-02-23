@@ -23,6 +23,7 @@ TEGRA_CUDA_ARCHITECTURE ?= "72"
 
 require conf/machine/include/tegra-common.inc
 require conf/machine/include/tegra-common-r35.inc
+require conf/machine/include/tegraflash_t194_fixups.inc
 
 L4T_BSP_PREFIX = "Jetson"
 L4T_DEB_SOCNAME_R35 = "t194"
@@ -60,10 +61,11 @@ TEGRA_BOOT_FIRMWARE_FILES = "\
 PREFERRED_VERSION_tegra-bootfiles = "35.6%"
 PREFERRED_VERSION_tegra-tools = "35.6%"
 PREFERRED_VERSION_tegra-redundant-boot-base = "35.6%"
-PREFERRED_VERSION_tegra-storage-layout = "35.6%"
-PREFERRED_VERSION_tegra-storage-layout-base = "35.6%"
+# PREFERRED_VERSION_tegra-storage-layout = "35.6%"
+# PREFERRED_VERSION_tegra-storage-layout-base = "35.6%"
 PREFERRED_VERSION_tegra-nvpower = "35.6%"
 PREFERRED_VERSION_tegra-flashtools-native = "35.6%"
+PREFERRED_VERSION_tegra-firmware = "35.6%"
 
 TEGRA_OPTEE_VERSION = "3.21.0-l4t%"
 PREFERRED_VERSION_optee-os = "${TEGRA_OPTEE_VERSION}"
@@ -72,13 +74,20 @@ PREFERRED_VERSION_optee-client = "${TEGRA_OPTEE_VERSION}"
 PREFERRED_VERSION_optee-test = "${TEGRA_OPTEE_VERSION}"
 PREFERRED_VERSION_optee-samples = "35.6%"
 
+PREFERRED_VERSION_edk2-basteools-tegra-native = "35.6%"
+PREFERRED_VERSION_edk2-firmware-tegra = "35.6%"
+PREFERRED_VERSION_standalone-mm-optee-tegra = "35.6%"
+
 PREFERRED_PROVIDER_virtual/dtb:tegra194 ?= "tegra194-devicetrees"
 PREFERRED_PROVIDER_virtual/kernel:tegra194 ?= "linux-yocto"
 PREFERRED_RPROVIDER_tegra-gbm-backend = "tegra-udrm-gbm"
+PREFERRED_RPROVIDER_kernel-module-tegra-drm = "kernel-module-tegra-drm"
 
 TEGRA_FLASHVARS:append:tegra194 = " EMMC_CFG MISC_COLD_BOOT_CONFIG SCR_COLD_BOOT_CONFIG"
+TEGRA_FLASHVAR_UEFI_IMAGE = "uefi_jetson"
+TEGRA_FLASHVAR_RCM_UEFI_IMAGE = "uefi_jetson"
 
 UBOOT_EXTLINUX_FDT = "/boot/${DTBFILE}"
 
 TOSIMGFILENAME:tegra194 = "tos-optee_t194.img"
-TEGRAFLASH_PKG_DEPENDS:append:tegra194 = " tegra-redundant-boot-rollback:do_populate_sysroot"
+TEGRA_RCM_EDK2_DEPENDS = ""

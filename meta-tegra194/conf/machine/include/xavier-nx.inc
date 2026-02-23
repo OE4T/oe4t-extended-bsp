@@ -25,6 +25,7 @@ ODMDATA ?= "0xB8190000"
 EMMC_BCT ?= "tegra194-mb1-bct-memcfg-p3668-0001-a00.cfg"
 EMMC_BCT_OVERRIDE ?= "tegra194-memcfg-sw-override.cfg"
 TEGRA_PLUGIN_MANAGER_OVERLAYS ?= "tegra194-p3668-p3509-overlay.dtbo"
+ROOTFS_DEVICE_FOR_INITRD_FLASH:xavier-nx = "${@xavier_nx_rootfs_device(d)}"
 
 OTABOOTDEV ?= "/dev/mtdblock0"
 OTAGPTDEV ?= "/dev/mtdblock0"
@@ -46,3 +47,15 @@ TEGRA_FLASHVAR_PMIC_CONFIG ?= "tegra194-mb1-bct-pmic-p3668-0001-a00.cfg"
 TEGRA_FLASHVAR_PROD_CONFIG ?= "tegra19x-mb1-prod-p3668-0001-a00.cfg"
 TEGRA_FLASHVAR_SCR_COLD_BOOT_CONFIG ?= "tegra194-mb1-bct-scr-cbb-mini-p3668.cfg"
 TEGRA_FLASHVAR_SCR_CONFIG ?= "tegra194-mb1-bct-scr-cbb-mini-p3668.cfg"
+
+def xavier_nx_rootfs_device(d):
+    import re
+    bootdev = d.getVar('TNSPEC_BOOTDEV')
+    # For Xavier NX booting from SDcard, the RCM booted kernel
+    # bypasses UEFI and doesn't get any overlays applied, such
+    # as the one that renames mmcblk1 -> mmcblk0
+    if d.getVar('NVIDIA_CHIP') == "0x19" and bootdev.startswith("mmc") and d.getVar('TEGRA_SPIFLASH_BOOT') == "1":
+        return "mmcblk1"
+    if bootdev.startswith("mmc") or bootdev.startswith("nvme"):
+        return re.sub(r"p[0-9]+$", "", bootdev)
+    return re.sub("[0-9]+$", "", bootdev)
