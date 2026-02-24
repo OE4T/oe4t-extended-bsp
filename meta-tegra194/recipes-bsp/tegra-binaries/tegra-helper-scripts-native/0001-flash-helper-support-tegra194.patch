@@ -1,8 +1,18 @@
-Upstream-Status: Inappropriate [unsupported chip]
+From a5e2f7e69af1252600d592f51abe6872b6339a18 Mon Sep 17 00:00:00 2001
+From: Kurt Kiefer <kekiefer@gmail.com>
+Date: Tue, 24 Feb 2026 08:51:01 -0800
+Subject: [PATCH] flash helper: support tegra194
 
---- tegra-flash-helper.sh	2026-02-09 14:08:28.413290582 -0800
-+++ tegra-flash-helper-t194.sh	2026-02-09 14:08:11.232177733 -0800
-@@ -275,6 +275,26 @@
+Upstream-Status: Inappropriate [unsupported chip]
+---
+ tegra-flash-helper.sh | 154 ++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 150 insertions(+), 4 deletions(-)
+
+diff --git a/tegra-flash-helper.sh b/tegra-flash-helper.sh
+index 49b6939..5b778bd 100644
+--- a/tegra-flash-helper.sh
++++ b/tegra-flash-helper.sh
+@@ -275,6 +275,26 @@ if [ -z "$CHIPREV" ]; then
                  echo "ERR: unrecognized fused configuration 0x$flval" >&2
                  exit 1
          esac
@@ -29,7 +39,7 @@ Upstream-Status: Inappropriate [unsupported chip]
      else
          echo "ERR: unrecognized chip ID: 0x${chipid:6:2}" >&2
          exit 1
-@@ -348,6 +368,15 @@
+@@ -348,6 +368,15 @@ if [ -z "$FAB" -o -z "$BOARDID" ]; then
          # chip_minor_revision=$($here/chkbdinfo -M chip_info.bin_bak)
          # bootrom_revision=$($here/chkbdinfo -O chip_info.bin_bak)
          # -XXX
@@ -45,7 +55,7 @@ Upstream-Status: Inappropriate [unsupported chip]
      fi
      skipuid=""
      have_boardinfo="yes"
-@@ -426,6 +455,10 @@
+@@ -426,6 +455,10 @@ if [ -n "$CHIP_SKU" ]; then
      echo "CHIP_SKU=\"$CHIP_SKU\"" >>boardvars.sh
  fi
  
@@ -56,7 +66,7 @@ Upstream-Status: Inappropriate [unsupported chip]
  if echo "$CHIP_SKU" | grep -q ":" 2>/dev/null; then
      chip_sku=$(echo "$CHIP_SKU" | cut -d: -f4)
  else
-@@ -525,6 +558,61 @@
+@@ -525,6 +558,61 @@ if [ "$CHIPID" = "0x23" ]; then
      sed -i "s/preprod_dev_sign = <1>/preprod_dev_sign = <0>/" "${DEV_PARAMS}";
      sed -i "s/preprod_dev_sign = <1>/preprod_dev_sign = <0>/" "${DEV_PARAMS_B}";
      sed -i "s/preprod_dev_sign = <1>/preprod_dev_sign = <0>/" "${EMC_FUSE_DEV_PARAMS}";
@@ -118,7 +128,7 @@ Upstream-Status: Inappropriate [unsupported chip]
  fi
  
  echo "Board ID($BOARDID) version($FAB) sku($BOARDSKU) revision($BOARDREV)"
-@@ -590,6 +678,7 @@
+@@ -590,6 +678,7 @@ else
      cp "$flash_in" flash.xml.tmp
  fi
  sed -e"s,VERFILE,${MACHINE}_bootblob_ver.txt," -e"s,BPFDTB_FILE,$BPFDTB_FILE," \
@@ -126,10 +136,10 @@ Upstream-Status: Inappropriate [unsupported chip]
      -e"s, DTB_FILE,$kernel_dtbfile," -e"s,BPFFILE,$BPF_FILE," \
      $appfile_sed flash.xml.tmp > flash.xml
  rm flash.xml.tmp
-@@ -635,10 +724,39 @@
+@@ -635,10 +724,39 @@ eks eks.img"
           --concat_cpubl_bldtb \
-          --cpubl uefi_jetson.bin \
-          --cpubl_rcm uefi_jetson_minimal.bin"
+          --cpubl ${UEFI_IMAGE}.bin \
+          --cpubl_rcm ${RCM_UEFI_IMAGE}.bin"
 +elif [ "$CHIPID" = "0x19" ]; then
 +    binsargs_params="mb2_bootloader nvtboot_recovery_t194.bin; \
 +mts_preboot preboot_c10_prod_cr.bin; \
@@ -166,56 +176,54 @@ Upstream-Status: Inappropriate [unsupported chip]
  fi
  
  if [ $bup_blob -ne 0 -o $to_sign -ne 0 -o "$sdcard" = "yes" -o $external_device -eq 1 ]; then
-@@ -700,6 +818,14 @@
+@@ -700,6 +818,12 @@ if [ $want_signing -eq 1 ]; then
          custinfofilename="$custinfo_out"
          SOSARGS="--applet mb1_t234_prod.bin "
          NV_ARGS=" "
 +    elif [ "$CHIPID" = "0x19" ]; then
 +        flashername="nvtboot_recovery_cpu_t194.bin"
-+        if [ $rcm_boot -eq 1 ]; then
-+           flashername="uefi_jetson.bin"
-+        fi
++        mb1filename="mb1_t194_prod.bin"
 +        SOSARGS="--applet mb1_t194_prod.bin "
 +        NV_ARGS="--soft_fuses tegra194-mb1-soft-fuses-l4t.cfg "
-+        tbcfilename="uefi_jetson.bin"
++        tbcfilename="${UEFI_IMAGE}.bin"
      fi
      BL_DIR="."
      bctfilename=$(echo $sdramcfg_files | cut -d, -f1)
-@@ -709,10 +835,10 @@
+@@ -709,10 +833,10 @@ if [ $want_signing -eq 1 ]; then
      rootfs_ab=0
      gen_read_ramcode=0
      debug_mode=0
--    FLASHARGS="--chip 0x23 $hsm_arg --bl uefi_jetson_minimal_with_dtb.bin \
-+    FLASHARGS="--chip $CHIPID $hsm_arg --bl $flashername \
+-    FLASHARGS="--chip 0x23 $hsm_arg --bl ${RCM_UEFI_IMAGE}_with_dtb.bin \
++    FLASHARGS="--chip $CHIPID $hsm_arg --bl ${flashername} \
            --sdram_config $sdramcfg_files \
            --odmdata $odmdata \
 -          --applet mb1_t234_prod.bin \
-+          $SOSARGS \
++          --applet $mb1filename \
            --cmd \"$tfcmd\" $skipuid \
            --cfg flash.xml \
            --bct_backup \
-@@ -734,10 +860,10 @@
+@@ -734,10 +858,10 @@ if [ $want_signing -eq 1 ]; then
  	BCTARGS="$bctargs $rcm_overlay_dtb_arg $custinfo_args --bct_backup"
  	L4T_CONF_DTBO="$rcm_bootcontrol_overlay"
  	BINSARGS="--bins \"$binsargs_params; kernel $RCMBOOT_KERNEL; kernel_dtb $kernel_dtbfile\""
--	FLASHARGS="--chip 0x23 $hsm_arg --bl uefi_jetson_minimal_with_dtb.bin \
-+	FLASHARGS="--chip $CHIPID $hsm_arg --bl $flashername \
+-	FLASHARGS="--chip 0x23 $hsm_arg --bl ${RCM_UEFI_IMAGE}_with_dtb.bin \
++	FLASHARGS="--chip $CHIPID $hsm_arg --bl ${flashername} \
            --sdram_config $sdramcfg_files \
            --odmdata $odmdata \
 -          --applet mb1_t234_prod.bin \
-+          $SOSARGS \
++          --applet $mb1filename \
            --cmd \"$tfcmd\" $skipuid \
            --cfg flash.xml \
            --bct_backup \
-@@ -760,6 +886,7 @@
+@@ -760,6 +884,7 @@ if [ $want_signing -eq 1 ]; then
      fi
      flashcmd="python3 $flashappname ${inst_args} $FLASHARGS"
  else
 +    if [ "$CHIPID" = "0x23" ]; then
-     flashcmd="python3 $flashappname ${inst_args} --chip 0x23 $hsm_arg --bl uefi_jetson_minimal_with_dtb.bin \
+     flashcmd="python3 $flashappname ${inst_args} --chip 0x23 $hsm_arg --bl ${RCM_UEFI_IMAGE}_with_dtb.bin \
            --sdram_config $sdramcfg_files \
            --odmdata $odmdata \
-@@ -770,6 +897,23 @@
+@@ -770,6 +895,23 @@ else
            --boot_chain A \
            $bctargs $overlay_dtb_arg $custinfo_args $extdevargs $sparseargs \
            --bins \"$binsargs_params\""
@@ -239,7 +247,7 @@ Upstream-Status: Inappropriate [unsupported chip]
  fi
  
  if [ $bup_blob -ne 0 ]; then
-@@ -781,6 +925,10 @@
+@@ -781,6 +923,10 @@ if [ $bup_blob -ne 0 ]; then
      tbcdtbfilename="$TBCDTB_FILE"
      bpfdtbfilename="$BPFDTB_FILE"
      localbootfile="boot.img"
