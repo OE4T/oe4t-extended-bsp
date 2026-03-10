@@ -1,0 +1,22 @@
+From 1b747e80727d0464fa28bba38f4f4f0490933925 Mon Sep 17 00:00:00 2001
+From: Kurt Kiefer <kekiefer@gmail.com>
+Date: Tue, 20 Jan 2026 11:44:26 -0800
+Subject: [PATCH] gpu: host1x-fence: add tegra194 to module device table
+
+Upstream-Status: Pending
+---
+ drivers/gpu/host1x-fence/dev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/host1x-fence/dev.c b/drivers/gpu/host1x-fence/dev.c
+index 2229978a..86de4bfb 100644
+--- a/drivers/gpu/host1x-fence/dev.c
++++ b/drivers/gpu/host1x-fence/dev.c
+@@ -502,6 +502,7 @@ unregister_chrdev_region:
+ }
+ 
+ static const struct of_device_id host1x_fence_of_match[] = {
++	{ .compatible = "nvidia,tegra194-host1x" },
+ 	{ .compatible = "nvidia,tegra234-host1x" },
+ 	{ },
+ };

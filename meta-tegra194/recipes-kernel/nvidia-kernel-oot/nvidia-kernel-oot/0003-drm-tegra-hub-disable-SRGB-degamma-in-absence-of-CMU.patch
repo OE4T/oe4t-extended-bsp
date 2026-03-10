@@ -1,0 +1,30 @@
+From cb6b50978abc9e80c0972d33870beebd9be871ef Mon Sep 17 00:00:00 2001
+From: Kurt Kiefer <kekiefer@gmail.com>
+Date: Mon, 19 Jan 2026 11:26:00 -0800
+Subject: [PATCH] drm/tegra: hub: disable SRGB degamma in absence of CMU
+ support
+
+Outputs downstream of these windows set up in the hub do not enable
+the CMU, so sRGB degamma here results in a linear gamma that is not
+reasonable for output. Both DisplayPort and HDMI RGB outputs expect
+and sRGB output, so just leave this alone in the window.
+
+Upstream-Status: Pending
+---
+ drivers/gpu/drm/tegra/hub.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/tegra/hub.c b/drivers/gpu/drm/tegra/hub.c
+index e923d228..8d5f695a 100644
+--- a/drivers/gpu/drm/tegra/hub.c
++++ b/drivers/gpu/drm/tegra/hub.c
+@@ -704,9 +704,6 @@ static void tegra_shared_plane_atomic_update(struct drm_plane *plane,
+ 
+ 		/* XXX parameterize */
+ 		value |= COLOR_SPACE_YUV_2020;
+-	} else {
+-		if (!tegra_plane_format_is_indexed(tegra_plane_state->format))
+-			value |= DEGAMMA_SRGB;
+ 	}
+ 
+ 	tegra_plane_writel(p, value, DC_WIN_SET_PARAMS);

@@ -1,0 +1,110 @@
+From 3df64e98933246617746cace316a10a87c2c6da6 Mon Sep 17 00:00:00 2001
+From: Kurt Kiefer <kekiefer@gmail.com>
+Date: Fri, 16 Jan 2026 11:17:45 -0800
+Subject: [PATCH] tegra194: actmon: fix set up of mc-utils and actmon
+
+Upstream-Status: Pending
+---
+ drivers/platform/tegra/mc-utils/mc-utils.c    | 47 +++++++++++++++++++
+ drivers/platform/tegra/tegra-cactmon-mc-all.c | 10 ++++
+ 2 files changed, 57 insertions(+)
+
+diff --git a/drivers/platform/tegra/mc-utils/mc-utils.c b/drivers/platform/tegra/mc-utils/mc-utils.c
+index 2a7d29fd..784369f4 100644
+--- a/drivers/platform/tegra/mc-utils/mc-utils.c
++++ b/drivers/platform/tegra/mc-utils/mc-utils.c
+@@ -391,12 +391,59 @@ static int __init tegra_mc_utils_init_t23x(void)
+ 	return 0;
+ }
+ 
++static int __init tegra_mc_utils_init_t194(void)
++{
++	u32 dram, ch, ecc, rank;
++	void __iomem *emc_base;
++	void __iomem *mcb_base;
++
++	if (!is_tegra_hypervisor_mode()) {
++		emc_base = ioremap(EMC_BASE, 0x00010000);
++		dram = readl(emc_base + EMC_FBIO_CFG5_0) & DRAM_MASK;
++		mcb_base = ioremap(MCB_BASE, MCB_SIZE);
++		if (!mcb_base) {
++			pr_err("Failed to ioremap\n");
++			return -ENOMEM;
++		}
++
++		ch = readl(mcb_base + MC_EMEM_ADR_CFG_CHANNEL_ENABLE_0);
++		ch &= CH_MASK;
++		ecc = 0; /* ECC not supported on T194 */
++
++		rank = readl(mcb_base + MC_EMEM_ADR_CFG_0) & RANK_MASK;
++
++		iounmap(emc_base);
++		iounmap(mcb_base);
++
++		while (ch) {
++			if (ch & 1)
++				ch_num++;
++			ch >>= 1;
++		}
++	}
++
++	emc_param.ecc = ecc;
++	emc_param.rank = rank;
++	emc_param.dram = dram;
++
++	set_dram_type();
++
++#if defined(CONFIG_DEBUG_FS)
++	tegra_mc_utils_debugfs_init();
++#endif
++	return 0;
++}
++
+ static int __init tegra_mc_utils_init(void)
+ {
+ 	if (of_machine_is_compatible("nvidia,tegra234")) {
+ 		ops = &mc_utils_t23x_ops;
+ 		return tegra_mc_utils_init_t23x();
+ 	}
++	if (of_machine_is_compatible("nvidia,tegra194")) {
++		ops = &mc_utils_t23x_ops;
++		return tegra_mc_utils_init_t194();
++	}
+ 	pr_err("mc-utils: Not able to find SOC DT node\n");
+ 	return -ENODEV;
+ }
+diff --git a/drivers/platform/tegra/tegra-cactmon-mc-all.c b/drivers/platform/tegra/tegra-cactmon-mc-all.c
+index f428aa3b..8cdf11b8 100644
+--- a/drivers/platform/tegra/tegra-cactmon-mc-all.c
++++ b/drivers/platform/tegra/tegra-cactmon-mc-all.c
+@@ -12,6 +12,7 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/types.h>
++#include <linux/reset.h>
+ 
+ #define	CENTRAL_ACTMON_CTRL_REG			0x0
+ #define CENTRAL_ACTMON_MC_ALL_AVG_COUNT_REG	0x124
+@@ -22,6 +23,7 @@
+ struct central_actmon {
+ 	struct device *dev;
+ 	struct clk *clk;
++	struct reset_control *rst;
+ 	unsigned long rate;
+ 	void __iomem *regs;
+ 	struct dentry *debugfs;
+@@ -113,6 +115,14 @@ static int central_actmon_probe(struct platform_device *pdev)
+ 				     PTR_ERR(cactmon->clk),
+ 				     "failed to get actmon clock\n");
+ 	cactmon->rate = clk_get_rate(cactmon->clk);
++	// clk_prepare_enable(cactmon->clk);
++
++	cactmon->rst = devm_reset_control_get(&pdev->dev, "actmon_rst");
++	if (IS_ERR(cactmon->rst))
++		return dev_err_probe(&pdev->dev,
++				     PTR_ERR(cactmon->rst),
++				     "failed to get actmon reset\n");
++	reset_control_deassert(cactmon->rst);
+ 
+ 	cactmon->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, cactmon);
